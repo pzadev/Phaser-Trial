@@ -32,6 +32,7 @@ var config = {
     }
 };
 
+var collisionBlocks
 
 var game = new Phaser.Game(config);
 
@@ -41,9 +42,14 @@ function preload() {
         frameHeight: 500 
     });
     this.load.spritesheet('guy', 'assets/guy.png', { frameWidth: 32, frameHeight: 32 });
+
+    this.load.image('collision', 'assets/collision.png')
 }
 
 function create() {
+
+    
+    // Test
 
     // Player Idle Animation
     this.anims.create({
@@ -101,6 +107,55 @@ function create() {
         repeat: -1
     });
 
+    // Collisions
+
+    collisionBlocks = this.physics.add.staticGroup();
+// House top left
+collisionBlocks.create(720, 500, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(640, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(600, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(560, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(520, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(480, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(460, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(720, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(720, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(720, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(720, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(720, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(680, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(720, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(720, 540, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(720, 420, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(720, 500, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(720, 500, null).setSize(1, 1).setOrigin(0, 0);  
+collisionBlocks.create(720, 590, null).setSize(1, 1).setOrigin(0, 0);  
+collisionBlocks.create(680, 590, null).setSize(1, 1).setOrigin(0, 0); 
+collisionBlocks.create(640, 590, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(590, 590, null).setSize(1, 1).setOrigin(0, 0);  
+collisionBlocks.create(590, 650, null).setSize(1, 1).setOrigin(0, 0);  
+collisionBlocks.create(590, 650, null).setSize(1, 1).setOrigin(0, 0);  
+collisionBlocks.create(550, 650, null).setSize(1, 1).setOrigin(0, 0); 
+collisionBlocks.create(430, 627, null).setSize(1, 1).setOrigin(0, 0); 
+collisionBlocks.create(430, 580, null).setSize(1, 1).setOrigin(0, 0); 
+collisionBlocks.create(430, 540, null).setSize(1, 1).setOrigin(0, 0); 
+collisionBlocks.create(430, 500, null).setSize(1, 1).setOrigin(0, 0); 
+collisionBlocks.create(430, 460, null).setSize(1, 1).setOrigin(0, 0); 
+collisionBlocks.create(490, 580, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(520, 620, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(520, 620, null).setSize(1, 1).setOrigin(0, 0);
+
+// House top left wall
+collisionBlocks.create(700, 750, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(740, 750, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(760, 750, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(760, 710, null).setSize(1, 1).setOrigin(0, 0);
+collisionBlocks.create(760, 670, null).setSize(1, 1).setOrigin(0, 0);
+
+    
+
+    this.physics.add.collider(player, collisionBlocks)
+
     // World bounds and camera
     this.physics.world.setBounds(0, 0, 1500, 1500);
     this.cameras.main.setBounds(0, 0, 1500, 1500);
@@ -108,13 +163,24 @@ function create() {
 
     // Keyboard input 
     cursors = this.input.keyboard.createCursorKeys();
+
+    coordinatesText = this.add.text(100, 100, 'X: 0, Y: 0', {
+        fontSize: '20px',
+        fill: '#fff',
+        fontFamily: 'Arial'
+    });
 }
 
 function update() {
+
+    // Test
+    coordinatesText.setText('X: ' + player.x.toFixed(0) + ', Y: ' + player.y.toFixed(0));
+    coordinatesText.setPosition(player.x, player.y - 40)
+
     // Player will stop moving immediately if 0
     player.setVelocity(0);
 
-    // Player.setVelocityX/Y are speed when moving up/down
+    // Player.setVelocityX/Y are speed when moving up/down!
 
     // Ensure left/right have priority over up/down
     if (cursors.left.isDown) {
