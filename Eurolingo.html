@@ -1,0 +1,155 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Phaser</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var config = {
+    type: Phaser.AUTO,
+    width: 1000,
+    height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: false
+        }
+    },
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
+
+
+var game = new Phaser.Game(config);
+
+function preload() {
+    this.load.spritesheet('background', 'assets/testBackgroundSpriteSheet.png', {
+        frameWidth: 630, 
+        frameHeight: 500 
+    });
+    this.load.spritesheet('guy', 'assets/guy.png', { frameWidth: 32, frameHeight: 32 });
+}
+
+function create() {
+
+    // Player Idle Animation
+    this.anims.create({
+        key: 'guyidle',
+        frames: this.anims.generateFrameNumbers('guy', { start: 0, end: 0 }),
+        frameRate: 1
+    });
+
+
+    this.anims.create({
+        key: 'background',
+        frames: this.anims.generateFrameNumbers('background', { start: 0, end: 80 }),
+        frameRate: 8, // Adjust frame rate to change speed of animations
+        repeat: -1 // Loop the animation indefinitely
+    });
+
+    const background = this.add.sprite(0, 0, 'background')
+        .setOrigin(0, 0) // DO NOT CHANGE
+        .setScale(3.2);  // Change this to alter 'map' zoom
+
+    background.play('background');
+   
+    // Player and animations
+    // Change 900 & 800 to alter char starting position
+    // Change setScale to increase/decrease char size
+    player = this.physics.add.sprite(900, 800, 'guy').setScale(2.5).setOrigin(0, 0);
+    player.setCollideWorldBounds(true);
+
+    // Animations for movement
+    this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('guy', { start: 24, end: 29 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('guy', { start: 24, end: 29 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'up',
+        frames: this.anims.generateFrameNumbers('guy', { start: 30, end: 35 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'down',
+        frames: this.anims.generateFrameNumbers('guy', { start: 18, end: 23 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    // World bounds and camera
+    this.physics.world.setBounds(0, 0, 1500, 1500);
+    this.cameras.main.setBounds(0, 0, 1500, 1500);
+    this.cameras.main.startFollow(player);
+
+    // Keyboard input 
+    cursors = this.input.keyboard.createCursorKeys();
+}
+
+function update() {
+    // Player will stop moving immediately if 0
+    player.setVelocity(0);
+
+    // Player.setVelocityX/Y are speed when moving up/down
+
+    // Ensure left/right have priority over up/down
+    if (cursors.left.isDown) {
+        player.setVelocityX(-160);
+        player.anims.play('right', true);
+        player.setFlipX(true);
+    } else if (cursors.right.isDown) {
+        player.setVelocityX(160);
+        player.anims.play('right', true);
+        player.setFlipX(false);
+    } 
+
+    // Only allow vertical movement if no horizontal movement is happening
+    if (player.body.velocity.x === 0) {
+        if (cursors.up.isDown) {
+            player.setVelocityY(-160);
+            player.anims.play('up', true);
+        } else if (cursors.down.isDown) {
+            player.setVelocityY(160);
+            player.anims.play('down', true);
+        }
+    }
+
+    // Idle animation
+    if (player.body.velocity.x === 0 && player.body.velocity.y === 0) {
+        player.anims.play('guyidle', true);
+    }
+}
+
+
+    
+
+
+
+</script>
+
+</body>
+</html>
