@@ -76,10 +76,10 @@
         // Change setScale to increase/decrease char size
         player = this.physics.add
           .sprite(900, 800, "guy")
-          .setSize(20, 20)
+          .setSize(18, 10)
           .setScale(2.5)
           .setOrigin(0, 0)
-          .setOffset(22, 22);
+          .setOffset(24, 31);
 
         player.setCollideWorldBounds(true);
 
@@ -127,16 +127,23 @@
         // Collisions
 
         collisionBlocks = this.physics.add.staticGroup();
-    
 
-        // House top left wall
+        // Fountain
+        collisionBlocks.create(965, 880, "collision").setSize(85, 40).setOrigin(1, 1);
+
+        // TL House
+        collisionBlocks.create(445, 460, "collision").setSize(335, 180).setOrigin(1, 1);
+
+
+        // TL House Wall
         collisionBlocks.create(285, 500, "collision").setSize(1, 150).setOrigin(1, 1);
         collisionBlocks.create(330, 450, "collision").setSize(1, 40).setOrigin(1, 1);
-        collisionBlocks.create(380, 430, "collision").setSize(-20, 1).setOrigin(1, 1);
+        collisionBlocks.create(380, 400, "collision").setSize(1, 30).setOrigin(1, 1);
+        collisionBlocks.create(350, 430, "collision").setSize(1, 10).setOrigin(1, 1);
         collisionBlocks.create(330, 650, "collision").setSize(1, 50).setOrigin(1, 1);
         collisionBlocks.create(370, 810, "collision").setSize(240, 1).setOrigin(1, 1);
         collisionBlocks.create(370, 710, "collision").setSize(1, 100).setOrigin(1, 1);
-        collisionBlocks.create(680, 810, "collision").setSize(140, 1).setOrigin(1, 1);
+        collisionBlocks.create(680, 810, "collision").setSize(120, 1).setOrigin(1, 1);
         collisionBlocks.create(810, 700, "collision").setSize(0, 100).setOrigin(1, 1);
         collisionBlocks.create(810, 700, "collision").setSize(100, 1).setOrigin(1, 1);
         collisionBlocks.create(900, 570, "collision").setSize(1, 120).setOrigin(1, 1);
