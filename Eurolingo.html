@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Phaser</title>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.87.0/dist/phaser.js"></script>
     <style type="text/css">
       body {
         margin: 0;
@@ -22,14 +22,17 @@
             debug: true,
           },
         },
-        scene: {
-          preload: preload,
-          create: create,
-          update: update,
-        },
+        scene: [Scene1, Scene2], // Scene options
       };
 
       var game = new Phaser.Game(config);
+
+      // Scene 1 (Main Scene)
+      function Scene2() {
+        this.preload = preload;
+        this.create = create;
+        this.update = update;
+      }
 
       function preload() {
         this.load.spritesheet("background", "assets/background.png", {
@@ -40,14 +43,10 @@
           frameWidth: 32,
           frameHeight: 32,
         });
-
-        this.load.image("collision", "assets/collision.png")
-
-    
+        this.load.image("collision", "assets/collision.png");
       }
 
       function create() {
-        // Player Idle Animation
         this.anims.create({
           key: "guyidle",
           frames: this.anims.generateFrameNumbers("guy", { start: 0, end: 0 }),
@@ -60,30 +59,26 @@
             start: 0,
             end: 80,
           }),
-          frameRate: 8, // Adjust frame rate to change speed of animations
-          repeat: -1, // Loop the animation indefinitely
+          frameRate: 8,
+          repeat: -1,
         });
 
         const background = this.add
           .sprite(0, 0, "background")
-          .setOrigin(0, 0) // DO NOT CHANGE
-          .setScale(3.2); // Change this to alter 'map' zoom
+          .setOrigin(0, 0)
+          .setScale(3.2);
 
         background.play("background");
 
-        // Player and animations
-        // Change 900 & 800 to alter char starting position
-        // Change setScale to increase/decrease char size
         player = this.physics.add
           .sprite(900, 800, "guy")
           .setSize(18, 10)
           .setScale(2.5)
           .setOrigin(0, 0)
-          .setOffset(24, 31);
+          .setOffset(6.5, 14);
 
         player.setCollideWorldBounds(true);
 
-        // Animations for movement
         this.anims.create({
           key: "left",
           frames: this.anims.generateFrameNumbers("guy", {
@@ -124,50 +119,81 @@
           repeat: -1,
         });
 
-        // Collisions
-
         collisionBlocks = this.physics.add.staticGroup();
 
+        // Fencing
+        collisionBlocks.create(690, 1500, "collision").setSize(10, 500).setOrigin(1, 1);
+        collisionBlocks.create(0, 1200, "collision").setSize(280, 1).setOrigin(1, 1);
+        collisionBlocks.create(420, 1200, "collision").setSize(400, 1).setOrigin(1, 1);
+        collisionBlocks.create(720, 1180, "collision").setSize(10, 205).setOrigin(1, 1);
+        // TR Fencing
+        collisionBlocks.create(1510, 530, "collision").setSize(10, 445).setOrigin(1, 1);
+        collisionBlocks.create(1870, 530, "collision").setSize(10, 445).setOrigin(1, 1);
+        collisionBlocks.create(1700, 330, "collision").setSize(300, 10).setOrigin(1, 1);
+        collisionBlocks.create(1600, 750, "collision").setSize(150, 10).setOrigin(1, 1);
+        collisionBlocks.create(1810, 750, "collision").setSize(100, 10).setOrigin(1, 1);
+
+        // CR House
+        collisionBlocks.create(1395, 610, "collision").setSize(100, 250).setOrigin(1, 1);
+        collisionBlocks.create(1320, 610, "collision").setSize(100, 200).setOrigin(1, 1);
+
+        // CL House
+        collisionBlocks.create(175, 820, "collision").setSize(180, 250).setOrigin(1, 1);
+
+        // BL House
+        collisionBlocks.create(550, 1200, "collision").setSize(300, 150).setOrigin(1, 1);
+
+        // TOP House
+        collisionBlocks.create(1235, 250, "collision").setSize(100, 250).setOrigin(1, 1);
+        collisionBlocks.create(1165, 245, "collision").setSize(100, 200).setOrigin(1, 1);
+        // Horse's House
+        collisionBlocks.create(1260, 1050, "collision").setSize(190, 200).setOrigin(1, 1);
+
+
         // Fountain
-        collisionBlocks.create(965, 880, "collision").setSize(85, 40).setOrigin(1, 1);
+        collisionBlocks.create(999, 900, "collision").setSize(85, 60).setOrigin(1, 1);
 
         // TL House
-        collisionBlocks.create(445, 460, "collision").setSize(335, 180).setOrigin(1, 1);
-
-
+        collisionBlocks.create(605, 540, "collision").setSize(335, 180).setOrigin(1, 1);
+        collisionBlocks.create(570, 670, "collision").setSize(80, 50).setOrigin(1, 1);
+        collisionBlocks.create(450, 665, "collision").setSize(20, 70).setOrigin(1, 1);
+        collisionBlocks.create(500, 645, "collision").setSize(80, 30).setOrigin(1, 1); // House door
         // TL House Wall
-        collisionBlocks.create(285, 500, "collision").setSize(1, 150).setOrigin(1, 1);
-        collisionBlocks.create(330, 450, "collision").setSize(1, 40).setOrigin(1, 1);
+        collisionBlocks.create(275, 560, "collision").setSize(1, 150).setOrigin(1, 1); // Left Wall
+        collisionBlocks.create(320, 460, "collision").setSize(1, 40).setOrigin(1, 1);
         collisionBlocks.create(380, 400, "collision").setSize(1, 30).setOrigin(1, 1);
-        collisionBlocks.create(350, 430, "collision").setSize(1, 10).setOrigin(1, 1);
-        collisionBlocks.create(330, 650, "collision").setSize(1, 50).setOrigin(1, 1);
-        collisionBlocks.create(370, 810, "collision").setSize(240, 1).setOrigin(1, 1);
-        collisionBlocks.create(370, 710, "collision").setSize(1, 100).setOrigin(1, 1);
-        collisionBlocks.create(680, 810, "collision").setSize(120, 1).setOrigin(1, 1);
-        collisionBlocks.create(810, 700, "collision").setSize(0, 100).setOrigin(1, 1);
-        collisionBlocks.create(810, 700, "collision").setSize(100, 1).setOrigin(1, 1);
-        collisionBlocks.create(900, 570, "collision").setSize(1, 120).setOrigin(1, 1);
-        collisionBlocks.create(900, 385, "collision").setSize(1, 120).setOrigin(1, 1);
-        collisionBlocks.create(400, 385, "collision").setSize(500, 1).setOrigin(1, 1);
+        collisionBlocks.create(350, 430, "collision").setSize(10, 1).setOrigin(1, 1);
+        collisionBlocks.create(317, 670, "collision").setSize(1, 50).setOrigin(1, 1);
+        collisionBlocks.create(480, 800, "collision").setSize(230, 1).setOrigin(1, 1);
+        collisionBlocks.create(350, 750, "collision").setSize(1, 100).setOrigin(1, 1);
+        collisionBlocks.create(730, 800, "collision").setSize(100, 1).setOrigin(1, 1);
+        collisionBlocks.create(800, 740, "collision").setSize(0, 100).setOrigin(1, 1);
+        collisionBlocks.create(860, 690, "collision").setSize(80, 1).setOrigin(1, 1);
+        collisionBlocks.create(900, 630, "collision").setSize(1, 120).setOrigin(1, 1);
+        collisionBlocks.create(900, 450, "collision").setSize(1, 120).setOrigin(1, 1);
+        collisionBlocks.create(635, 375, "collision").setSize(480, 1).setOrigin(1, 1);
 
         this.physics.add.collider(player, collisionBlocks);
+
+
+        // Example: Create a region where the player can trigger a scene change
+        // Trigger area for scene change (e.g., the top-right corner of the map)
+        this.triggerZone = this.add.zone(950, 600, 50, 51); // A zone to trigger scene change
+        this.physics.world.enable(this.triggerZone); // Enable physics for the zone
+
+        this.physics.add.overlap(player, this.triggerZone, this.changeScene, null, this);
 
         // World bounds and camera
         this.physics.world.setBounds(0, 0, 2000, 1600);
         this.cameras.main.setBounds(0, 0, 2000, 1600);
         this.cameras.main.startFollow(player);
 
-        // Keyboard input
         cursors = this.input.keyboard.createCursorKeys();
       }
 
       function update() {
-        // Player will stop moving immediately if 0
         player.setVelocity(0);
 
-        // Player.setVelocityX/Y are speed when moving up/down
-
-        // Ensure left/right have priority over up/down
         if (cursors.left.isDown) {
           player.setVelocityX(-160);
           player.anims.play("right", true);
@@ -178,7 +204,6 @@
           player.setFlipX(false);
         }
 
-        // Only allow vertical movement if no horizontal movement is happening
         if (player.body.velocity.x === 0) {
           if (cursors.up.isDown) {
             player.setVelocityY(-160);
@@ -189,10 +214,24 @@
           }
         }
 
-        // Idle animation
         if (player.body.velocity.x === 0 && player.body.velocity.y === 0) {
           player.anims.play("guyidle", true);
         }
+      }
+
+      // Method to change scenes
+      function changeScene() {
+        this.scene.start("Scene1"); // Transition to Scene2 when the player overlaps the trigger
+      }
+
+      // Scene 2 (Second Scene)
+      function Scene1() {
+        this.create = function () {
+          this.add.text(400, 300, "Welcome to Scene 1!", {
+            fontSize: "32px",
+            fill: "#ffffff",
+          });
+        };
       }
     </script>
   </body>
